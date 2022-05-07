@@ -1,8 +1,6 @@
 package numbers;
 
 import java.util.Scanner;
-
-import static numbers.Print.*;
 /** Objectives
  The program is to check whether the given natural number is a buzz number.
 
@@ -14,46 +12,19 @@ import static numbers.Print.*;
  Finish the program after printing the message.
  Natural numbers are whole numbers starting from 1. **/
 public class BuzzNumbers {
-    private static String numStr;
+
     private static final Scanner scanner =
             new Scanner(System.in);
-    private static boolean isBuzzNumber = true;
 
+    static String checkBuzzNumber(String numStr) {
 
-    public static boolean isBuzzNumber() {
-        return isBuzzNumber;
-    }
+        boolean isDivBySeven = isDivBySeven(numStr);
+        boolean isEndSeven = isEndSeven(numStr);
 
-    public static String getNumStr() {
-        return numStr;
-    }
-
-    static void runBuzzNumbers() {
-
-        if (!isNaturalNumber()) {
-            printErrorMessage();
-            return;
+        if (isDivBySeven || isEndSeven) {
+            return "true";
         }
-        printParity();
-        checkBuzzNumber();
-    }
-
-    static void checkBuzzNumber() {
-
-        boolean isDivBySeven = isDivBySeven();
-        boolean isEndSeven = isEndSeven();
-
-        if (isDivBySeven && isEndSeven) {
-            printAll("Div/End");
-
-        } else if (isEndSeven) {
-            printAll("EndSeven");
-
-        } else if (isDivBySeven) {
-            printAll("divSeven");
-        }
-        isBuzzNumber = false;
-        printAll("NotDiv/End");
+        return "false";
     }
     // implementing div by 7 algorithm to meet maximum requirement
         /* First Remove the last digit of the number;
@@ -65,7 +36,7 @@ public class BuzzNumbers {
         For example, take 196. We remove the last digit and get 19.
         We subtract 12 (the removed digit multiplied by 2) to get 7.
         Since the last left digit is 7, the number is multiple of 7. So 196 is a Buzz number!*/
-    static boolean isDivBySeven() {
+    static boolean isDivBySeven(String numStr) {
 
         if (Integer.parseInt(numStr) == 7) {
             return true;
@@ -97,27 +68,13 @@ public class BuzzNumbers {
         return false;
     }
 
-    static boolean isEndSeven() {
+    static boolean isEndSeven(String numStr) {
         return numStr.endsWith("7");
     }
 
-    static boolean checkParity() {
+    static boolean checkParity( String numStr) {
         return Integer.parseInt(numStr) % 2 == 0;
     }
 
-    static boolean isNaturalNumber() {
 
-        System.out.println("Enter a natural number:");
-        numStr = scanner.next();
-
-        try {
-            int naturalNum = Integer.parseInt(numStr);
-            if (naturalNum < 1) {
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
-    }
 }

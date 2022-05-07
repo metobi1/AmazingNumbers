@@ -1,10 +1,10 @@
 package numbers;
 
-import static numbers.BuzzNumbers.*;
+import static numbers.AmazingNumbers.*;
 
 public class Main {
     public static void main(String[] args) {
 
-        runBuzzNumbers();
+        runAmazingNumbers();
     }
 }

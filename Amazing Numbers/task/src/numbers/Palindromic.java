@@ -18,13 +18,13 @@ public class Palindromic {
         for(int i = 0; i < strNum.length(); i++) {
             // compare left side with right side till they meet at the
             // middle
-            if (strNum.charAt(i) == strNum.charAt(len - count++)) {
-                if (halfLen == count) {
-                    break;
-                }
-            } else {
+            if (!(strNum.charAt(i) == strNum.charAt(len - count))) {
                 return "false";
             }
+            if (halfLen == count) {
+                break;
+            }
+            count++;
         }
         return "true";
     }

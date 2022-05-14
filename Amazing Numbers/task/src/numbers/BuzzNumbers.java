@@ -68,6 +68,20 @@ public class BuzzNumbers {
         return strNum.endsWith("7");
     }
 
+    static String isOdd(String strNum) {
+        if (!checkParity(strNum)) {
+            return "true";
+        }
+        return "false";
+    }
+
+    static String isEven(String strNum) {
+        if (checkParity(strNum)) {
+            return "true";
+        }
+        return "false";
+    }
+
     static boolean checkParity( String strNum) {
         return Long.parseLong(strNum) % 2 == 0;
     }

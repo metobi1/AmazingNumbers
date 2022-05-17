@@ -1,5 +1,7 @@
 package numbers;
 
+import java.util.List;
+
 public class Print {
 
     static void printWelcomeTitle() {
@@ -14,6 +16,7 @@ public class Print {
         System.out.println("  * the first parameter represents a starting number;");
         System.out.println("  * the second parameter shows how many consecutive numbers are to be printed;");
         System.out.println("- two natural numbers and a property to search for;");
+        System.out.println("- two natural numbers and two properties to search for;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
     }
@@ -44,6 +47,18 @@ public class Print {
 
         System.out.printf("The property [%s] is wrong.%n", wrongProperty);
         System.out.printf("Available properties: %s%n", AmazingNumbers.PROPERTIES);
+    }
+
+    static void printErrorMessage(List<String> wrongProperties) {
+
+        System.out.printf("The properties %s are wrong.%n", wrongProperties);
+        System.out.printf("Available properties: %s%n", AmazingNumbers.PROPERTIES);
+    }
+
+    static void printMutExErrorMessage(List<String> wrongProperties) {
+
+        System.out.printf("The request contains mutually exclusive properties: %s.%n", wrongProperties);
+        System.out.println("There are no numbers with these properties.");
     }
 
     static void printTitle(String strNum) {
@@ -82,9 +97,17 @@ public class Print {
         System.out.printf("        spy: %s%n", spyStatus);
     }
 
+    static void printSunnyStatus(String sunnyStatus) {
+        System.out.printf("        sunny: %s%n", sunnyStatus);
+    }
+
+    static void printPerfectSquareStatus(String perfSquareStatus) {
+        System.out.printf("        square: %s%n", perfSquareStatus);
+    }
+
     static void printAll(String strNum, String even, String odd,
                          String buzz, String duck, String palindrome,
-                         String gapful, String spy) {
+                         String gapful, String spy, String sunny, String perfectSquare) {
         printTitle(strNum);
         printParity(even, odd);
         printBuzzStatus(buzz);
@@ -92,5 +115,8 @@ public class Print {
         printPalindromicStatus(palindrome);
         printGapfulStatus(gapful);
         printSpyStatus(spy);
+        printSunnyStatus(sunny);
+        printPerfectSquareStatus(perfectSquare);
+
     }
 }

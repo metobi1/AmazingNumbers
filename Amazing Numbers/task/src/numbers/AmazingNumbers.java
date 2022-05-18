@@ -11,25 +11,13 @@ import static numbers.GapfulNumbers.*;
 import static numbers.SpyNumbers.*;
 import static numbers.Sunny.*;
 import static numbers.Square.*;
+import static numbers.JumpingNumbers.*;
 
 /**
- Our program can search for Spy and Palindromic numbers.
- What if we want to find all even Spy numbers?
- Or find all odd numbers among Palindromic numbers?
- Are there any Palindromics that are also Spies?
- In this stage, you will add the ability to search for several properties at once!
-
- What if a user enters the same property twice by mistake?
- For example, they want to find all even numbers that are even?
- Just ignore this duplicate property.
- What about two mutually exclusive properties?
- For example, if a user wants to find even numbers that are odd.
- In this case, the program will initiate the search, but there are no such numbers.
- We need to make our program foolproof.
- If a request contains mutually exclusive properties,
- the program should abort this request and warn the user.
- There are three pairs of mutually exclusive properties.
- A request cannot include Even and Odd, Duck and Spy, Sunny and Square numbers.
+ In this stage, we will also remove the limitation on pending properties in a request.
+ The program knows how to calculate ten properties of numbers,
+ and it would be strange to limit the query to just two properties.
+ Let's remove this limitation. Let the program indicate all properties for all numbers in the request.
  **/
 
 public class AmazingNumbers {
@@ -38,7 +26,10 @@ public class AmazingNumbers {
     private static boolean exit = false;
     static final List<String> PROPERTIES =
             List.of(("EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, " +
-                    "SPY, SUNNY, SQUARE").split(", "));
+                    "SPY, SUNNY, SQUARE, JUMPING").split(", "));
+
+    static List<String> mutExclList = null;
+    static List<String> errorList = new ArrayList<>();
 
     static void runAmazingNumbers() {
 
@@ -76,6 +67,18 @@ public class AmazingNumbers {
         }
     }
 
+    static boolean allValid(List<String> requests) {
+        List<String> multProps = requests.subList(2, requests.size());
+        boolean isProp = true;
+        for (String prop : multProps) {
+            if (!isProperty(prop)) {
+                errorList.add(prop);
+                isProp = false;
+            }
+        }
+        return isProp;
+    }
+
     static boolean isValidMultReq(List<String> requests) {
 
         boolean isValid = true;
@@ -88,22 +91,28 @@ public class AmazingNumbers {
                     printErrorMessage(i);
                     return isValid;
                 }
-            } else if (requests.size() == 4 && !isProperty(requests.get(2))
-                    && !isProperty(requests.get(3))) {
-                List<String> wrongProp = List.of(requests.get(2), requests.get(3));
-                printErrorMessage(wrongProp);
-                return false;
-            } else {
+            } else if (!allValid(requests)) {
+                if (errorList.size() > 1) {
+                    printErrorMessage(errorList);
+                    errorList.clear();
+                    return false;
+                } else {
+                    printErrorMessage(errorList.toString());
+                    errorList.clear();
+                    return false;
+                }
+            }
+            /*else {
                 isValid = isProperty(requests.get(i));
                 if(!isValid) {
                     printErrorMessage(requests.get(i).toUpperCase());
                     return isValid;
                 }
-            }
+            }*/
         }
-        if (4 == requests.size()) {
+        if (requests.size() >= 4) {
             if (mutExclusive(requests)) {
-                printMutExErrorMessage(Arrays.asList(requests.get(2), requests.get(3)));
+                printMutExErrorMessage(mutExclList);
                 isValid = false;
             }
         }
@@ -114,13 +123,50 @@ public class AmazingNumbers {
 
         List<String> sortedStr = new ArrayList<>(unSortedStr);
 
-        Collections.sort(sortedStr);
-        return "even".equalsIgnoreCase(sortedStr.get(2)) &&
-                "odd".equalsIgnoreCase(sortedStr.get(3)) ||
-                "duck".equalsIgnoreCase(sortedStr.get(2)) &&
-                        "spy".equalsIgnoreCase(sortedStr.get(3)) ||
-                "square".equalsIgnoreCase(sortedStr.get(2)) &&
-                        "sunny".equalsIgnoreCase(sortedStr.get(3));
+        int mut1 = 0, mut2 = 0, mut3 = 0;
+        StringBuilder mutStr1 = new StringBuilder();
+        StringBuilder mutStr2 = new StringBuilder();
+        StringBuilder mutStr3 = new StringBuilder();
+
+        for (int i = 0; i < sortedStr.size(); i++) {
+
+            if ("even".equalsIgnoreCase(sortedStr.get(i))) {
+                mutStr1.append(sortedStr.get(i) + " ");
+                mut1++;
+            } else if ("odd".equalsIgnoreCase(sortedStr.get(i))) {
+                mutStr1.append(sortedStr.get(i) + " ");
+                mut1++;
+            } else if ("duck".equalsIgnoreCase(sortedStr.get(i))) {
+                mutStr2.append(sortedStr.get(i) + " ");
+                mut2++;
+            } else if ("spy".equalsIgnoreCase(sortedStr.get(i))) {
+                mutStr2.append(sortedStr.get(i) + " ");
+                mut2++;
+            } else if ("square".equalsIgnoreCase(sortedStr.get(i))) {
+                mutStr3.append(sortedStr.get(i) + " ");
+                mut3++;
+            } else if ("sunny".equalsIgnoreCase(sortedStr.get(i))) {
+                mutStr3.append(sortedStr.get(i) + " ");
+                mut3++;
+            }
+        }
+        loadErrorList(mut1, mut2, mut3, mutStr1.toString(),
+                mutStr2.toString(), mutStr3.toString());
+        return  mut1 == 2 || mut2 == 2 || mut3 == 2;
+    }
+
+    static void loadErrorList(int mut1, int mut2, int mut3,
+                              String mutStr1, String mutStr2, String mutStr3) {
+        if (mut1 == 2) {
+            String[] str = mutStr1.split(" ");
+            mutExclList = Arrays.asList(str);
+        } else if (mut2 == 2) {
+            String[] str = mutStr2.split(" ");
+            mutExclList = Arrays.asList(str);
+        } else if (mut3 == 2) {
+            String[] str = mutStr3.split(" ");
+            mutExclList = Arrays.asList(str);
+        }
     }
 
     static void processMultReqFiltered(List<String> requests, boolean propOfProp) {
@@ -129,16 +175,12 @@ public class AmazingNumbers {
         int consecNum = Integer.parseInt(requests.get(1));
         int count = 0;
         String propType = requests.get(2);
-        String propType2 = "";
-        if (propOfProp) {
-            propType2 = requests.get(3);
-        }
 
         for (long i = startNum;; i++) {
 
             if (propOfProp) {
                 if ("true".equals(hasProp(propType, Long.toString(i))) &&
-                        "true".equals(hasProp(propType2, Long.toString(i)))) {
+                        allHaveProp(requests, Long.toString(i))) {
                     String properties = checkProperties(Long.toString(i));
                     printProperties(properties);
                     count++;
@@ -157,6 +199,18 @@ public class AmazingNumbers {
                 }
             }
         }
+    }
+
+    static boolean allHaveProp(List<String> requests, String strNum ) {
+
+        List<String> multProps = requests.subList(3, requests.size());
+
+        for (String prop : multProps) {
+            if (!"true".equals(hasProp(prop, strNum))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     static void processTwoReq(List<String> requests) {
@@ -184,12 +238,8 @@ public class AmazingNumbers {
         else if (requests.size() == 3) {
             processMultReqFiltered(requests, false);
         }
-        else if (requests.size() == 4) {
-            if (compareTo(requests.get(2), requests.get(3))) {
-                processMultReqFiltered(requests, false);
-            } else {
-                processMultReqFiltered(requests, true);
-            }
+        else if (requests.size() >= 4) {
+            processMultReqFiltered(requests, true);
         }
     }
 
@@ -214,8 +264,10 @@ public class AmazingNumbers {
             return isSpyNumber(strNum);
         } else if ("sunny".equalsIgnoreCase(propType)) {
             return isSunnyToStr(strNum);
+        } else if ("square".equalsIgnoreCase(propType)) {
+            return isPerfSquareToStr(strNum);
         }
-        return isPerfSquareToStr(strNum);
+        return isJumpingToStr(strNum);
     }
 
     static String checkProperties(String strNum) {
@@ -258,6 +310,10 @@ public class AmazingNumbers {
             String square = "square";
             properties.append(String.format(" %s", square));
         }
+        if ("true".equals(isJumpingToStr(strNum))) {
+            String jumping = "jumping";
+            properties.append(String.format(" %s", jumping));
+        }
         return properties.toString();
     }
 
@@ -284,7 +340,8 @@ public class AmazingNumbers {
         printAll(formatted, even, odd, isBuzzNumber(strNum),
                 isDuckNum(strNum), isPalindromic(strNum),
                 isGapful(strNum), isSpyNumber(strNum),
-                isSunnyToStr(strNum), isPerfSquareToStr(strNum));
+                isSunnyToStr(strNum), isPerfSquareToStr(strNum),
+                isJumpingToStr(strNum));
     }
     static boolean isNaturalNumber(String strNum) {
 

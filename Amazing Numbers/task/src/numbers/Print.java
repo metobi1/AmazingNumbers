@@ -15,8 +15,7 @@ public class Print {
         System.out.println("- enter two natural numbers to obtain the properties of the list:");
         System.out.println("  * the first parameter represents a starting number;");
         System.out.println("  * the second parameter shows how many consecutive numbers are to be printed;");
-        System.out.println("- two natural numbers and a property to search for;");
-        System.out.println("- two natural numbers and two properties to search for;");
+        System.out.println("- two natural numbers and properties to search for;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
     }
@@ -45,7 +44,7 @@ public class Print {
 
     static void printErrorMessage(String wrongProperty) {
 
-        System.out.printf("The property [%s] is wrong.%n", wrongProperty);
+        System.out.printf("The property %s is wrong.%n", wrongProperty);
         System.out.printf("Available properties: %s%n", AmazingNumbers.PROPERTIES);
     }
 
@@ -105,9 +104,14 @@ public class Print {
         System.out.printf("        square: %s%n", perfSquareStatus);
     }
 
+    static void printJumpingStatus(String jumpingStatus) {
+        System.out.printf("        jumping: %s%n", jumpingStatus);
+    }
+
     static void printAll(String strNum, String even, String odd,
                          String buzz, String duck, String palindrome,
-                         String gapful, String spy, String sunny, String perfectSquare) {
+                         String gapful, String spy, String sunny,
+                         String perfectSquare, String jumping) {
         printTitle(strNum);
         printParity(even, odd);
         printBuzzStatus(buzz);
@@ -117,6 +121,7 @@ public class Print {
         printSpyStatus(spy);
         printSunnyStatus(sunny);
         printPerfectSquareStatus(perfectSquare);
+        printJumpingStatus(jumping);
 
     }
 }

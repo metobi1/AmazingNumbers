@@ -12,12 +12,39 @@ import static numbers.SpyNumbers.*;
 import static numbers.Sunny.*;
 import static numbers.Square.*;
 import static numbers.JumpingNumbers.*;
+import static numbers.Happy.*;
+import static numbers.Sad.*;
 
 /**
- In this stage, we will also remove the limitation on pending properties in a request.
- The program knows how to calculate ten properties of numbers,
- and it would be strange to limit the query to just two properties.
- Let's remove this limitation. Let the program indicate all properties for all numbers in the request.
+ Our program is finished. It can indicate many interesting properties of numbers,
+ it knows how to calculate them. Now, when prompted, a user can have a list of number properties.
+ To complete the program, let's add an ability to exclude a property from the search query.
+ If a user puts a minus (-) before the property, exclude this property from the search query.
+ For example, if a user specifies palindromic -duck,
+ it means that they are looking for Palindromic numbers that are not Ducks.
+ Objectives
+ Your program should process the user requests. In this stage, your program should:
+
+ Welcome users;
+ Display the instructions;
+ Ask for a request;
+ If a user enters an empty request, print the instructions;
+ If the user enters zero, terminate the program;
+ If numbers are not natural, print the error message;
+ If an incorrect property is specified, print the error message and the list of available properties;
+ For one number, print the properties of the number;
+ For two numbers, print the properties of all numbers in the list;
+ For two numbers and two properties, print the list of numbers that contain the specified properties;
+ If a property is preceded by a minus, this property should not be present in a number;
+ If the user specifies mutually exclusive properties, abort the request and warn the user.
+ Once the request is processed, continue execution from step 3.
+
+ In this stage, property names include
+ even, odd, buzz, duck, palindromic, gapful, spy, sunny, square, jumping, sad, and happy.
+ Mutually exclusive properties are even/odd, duck/spy, sunny/square, sad/happy pairs,
+ as well as direct opposites (property and -property).
+ The test won't check the order of properties, their indentation, and spaces.
+ You may format numbers as you like.
  **/
 
 public class AmazingNumbers {
@@ -26,7 +53,7 @@ public class AmazingNumbers {
     private static boolean exit = false;
     static final List<String> PROPERTIES =
             List.of(("EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, " +
-                    "SPY, SUNNY, SQUARE, JUMPING").split(", "));
+                    "SPY, SUNNY, SQUARE, JUMPING, HAPPY, SAD").split(", "));
 
     static List<String> mutExclList = null;
     static List<String> errorList = new ArrayList<>();
@@ -71,6 +98,11 @@ public class AmazingNumbers {
         List<String> multProps = requests.subList(2, requests.size());
         boolean isProp = true;
         for (String prop : multProps) {
+
+            if (prop.charAt(0) == '-') {
+                prop = prop.substring(1);
+
+            }
             if (!isProperty(prop)) {
                 errorList.add(prop);
                 isProp = false;
@@ -102,13 +134,6 @@ public class AmazingNumbers {
                     return false;
                 }
             }
-            /*else {
-                isValid = isProperty(requests.get(i));
-                if(!isValid) {
-                    printErrorMessage(requests.get(i).toUpperCase());
-                    return isValid;
-                }
-            }*/
         }
         if (requests.size() >= 4) {
             if (mutExclusive(requests)) {
@@ -123,40 +148,118 @@ public class AmazingNumbers {
 
         List<String> sortedStr = new ArrayList<>(unSortedStr);
 
-        int mut1 = 0, mut2 = 0, mut3 = 0;
+        int mut1 = 0, mut2 = 0, mut3 = 0, mut4 = 0, mut5 = 0 ,
+                mut6 = 0, mut7 = 0, mut9 = 0;
         StringBuilder mutStr1 = new StringBuilder();
         StringBuilder mutStr2 = new StringBuilder();
         StringBuilder mutStr3 = new StringBuilder();
+        StringBuilder mutStr4 = new StringBuilder();
+        StringBuilder mutStr5 = new StringBuilder();
+        StringBuilder mutStr6 = new StringBuilder();
+        StringBuilder mutStr7 = new StringBuilder();
+        StringBuilder mutStr9 = new StringBuilder();
 
         for (int i = 0; i < sortedStr.size(); i++) {
 
             if ("even".equalsIgnoreCase(sortedStr.get(i))) {
-                mutStr1.append(sortedStr.get(i) + " ");
-                mut1++;
+                if (mutStr1.indexOf("EVEN") == -1) {
+                    mutStr1.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut1++;
+                }
             } else if ("odd".equalsIgnoreCase(sortedStr.get(i))) {
-                mutStr1.append(sortedStr.get(i) + " ");
-                mut1++;
+                if (mutStr1.indexOf("ODD") == -1) {
+                    mutStr1.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut1++;
+                }
             } else if ("duck".equalsIgnoreCase(sortedStr.get(i))) {
-                mutStr2.append(sortedStr.get(i) + " ");
-                mut2++;
+                if (mutStr2.indexOf("DUCK") == -1) {
+                    mutStr2.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut2++;
+                }
             } else if ("spy".equalsIgnoreCase(sortedStr.get(i))) {
-                mutStr2.append(sortedStr.get(i) + " ");
-                mut2++;
+                if (mutStr2.indexOf("SPY") == -1) {
+                    mutStr2.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut2++;
+                }
             } else if ("square".equalsIgnoreCase(sortedStr.get(i))) {
-                mutStr3.append(sortedStr.get(i) + " ");
-                mut3++;
+                if (mutStr3.indexOf("SQUARE") == -1) {
+                    mutStr3.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut3++;
+                }
             } else if ("sunny".equalsIgnoreCase(sortedStr.get(i))) {
-                mutStr3.append(sortedStr.get(i) + " ");
-                mut3++;
+                if (mutStr3.indexOf("SUNNY") == -1) {
+                    mutStr3.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut3++;
+                }
+            }else if ("happy".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr4.indexOf("HAPPY") == -1) {
+                    mutStr4.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut4++;
+                }
+            } else if ("sad".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr4.indexOf("SAD") == -1) {
+                    mutStr4.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut4++;
+                }
+            } else if ("-even".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr6.indexOf("-EVEN") == -1) {
+                    mutStr6.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut6++;
+                }
+            } else if ("-odd".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr6.indexOf("-ODD") == -1) {
+                    mutStr6.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut6++;
+                }
+            } else if ("-duck".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr7.indexOf("-DUCK") == -1) {
+                    mutStr7.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut7++;
+                }
+            } else if ("-spy".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr7.indexOf("-SPY") == -1) {
+                    mutStr7.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut7++;
+                }
+            } else if ("-happy".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr9.indexOf("-HAPPY") == -1) {
+                    mutStr9.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut9++;
+                }
+            } else if ("-sad".equalsIgnoreCase(sortedStr.get(i))) {
+                if (mutStr9.indexOf("-SAD") == -1) {
+                    mutStr9.append(sortedStr.get(i).toUpperCase()).append(" ");
+                    mut9++;
+                }
+            }
+            if (negMuts(sortedStr, sortedStr.get(i))) {
+                mutStr5.append(sortedStr.get(i).toUpperCase()).append(" ");
+                mut5 = 2;
             }
         }
-        loadErrorList(mut1, mut2, mut3, mutStr1.toString(),
-                mutStr2.toString(), mutStr3.toString());
-        return  mut1 == 2 || mut2 == 2 || mut3 == 2;
+        loadErrorList(mut1, mut2, mut3, mut4, mut5, mut6, mut7, mut9,
+                mutStr1.toString(), mutStr2.toString(), mutStr3.toString(),
+                mutStr4.toString(), mutStr5.toString(), mutStr6.toString(),
+                mutStr7.toString(), mutStr9.toString());
+        return  mut1 == 2 || mut2 == 2 || mut3 == 2 || mut4 == 2 || mut5 == 2 ||
+                mut6 == 2 || mut7 == 2 || mut9 == 2;
     }
 
-    static void loadErrorList(int mut1, int mut2, int mut3,
-                              String mutStr1, String mutStr2, String mutStr3) {
+    static boolean negMuts(List<String> requests, String posProp ) {
+        for (String prop : requests) {
+            if (Objects.equals(prop.substring(1), posProp) ||
+                    Objects.equals(prop, posProp.substring(1))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void loadErrorList(int mut1, int mut2, int mut3, int mut4, int mut5,
+                              int mut6, int mut7, int mut9,
+                              String mutStr1, String mutStr2, String mutStr3,
+                              String mutStr4, String mutStr5, String mutStr6,
+                              String mutStr7, String mutStr9) {
         if (mut1 == 2) {
             String[] str = mutStr1.split(" ");
             mutExclList = Arrays.asList(str);
@@ -165,6 +268,21 @@ public class AmazingNumbers {
             mutExclList = Arrays.asList(str);
         } else if (mut3 == 2) {
             String[] str = mutStr3.split(" ");
+            mutExclList = Arrays.asList(str);
+        } else if (mut4 == 2) {
+            String[] str = mutStr4.split(" ");
+            mutExclList = Arrays.asList(str);
+        } else if (mut5 == 2) {
+            String[] str = mutStr5.split(" ");
+            mutExclList = Arrays.asList(str);
+        } else if (mut6 == 2) {
+            String[] str = mutStr6.split(" ");
+            mutExclList = Arrays.asList(str);
+        } else if (mut7 == 2) {
+            String[] str = mutStr7.split(" ");
+            mutExclList = Arrays.asList(str);
+        } else if (mut9 == 2) {
+            String[] str = mutStr9.split(" ");
             mutExclList = Arrays.asList(str);
         }
     }
@@ -179,7 +297,20 @@ public class AmazingNumbers {
         for (long i = startNum;; i++) {
 
             if (propOfProp) {
-                if ("true".equals(hasProp(propType, Long.toString(i))) &&
+
+                if (propType.charAt(0) == '-') {
+
+                    if (!"true".equals(hasProp(propType.substring(1),
+                            Long.toString(i))) && allHaveProp(requests, Long.toString(i))) {
+                        String properties = checkProperties(Long.toString(i));
+                        printProperties(properties);
+                        count++;
+                        if (count == consecNum) {
+                            break;
+                        }
+                    }
+
+                } else if ("true".equals(hasProp(propType, Long.toString(i))) &&
                         allHaveProp(requests, Long.toString(i))) {
                     String properties = checkProperties(Long.toString(i));
                     printProperties(properties);
@@ -188,6 +319,19 @@ public class AmazingNumbers {
                         break;
                     }
                 }
+
+            } else if (propType.charAt(0) == '-') {
+
+                if (!"true".equals(hasProp(propType.substring(1), Long.toString(i)))) {
+                    String properties = checkProperties(Long.toString(i));
+                    printProperties(properties);
+                    count++;
+                    if (count == consecNum) {
+                        break;
+                    }
+                }
+
+
             } else {
                 if ("true".equals(hasProp(propType, Long.toString(i)))) {
                     String properties = checkProperties(Long.toString(i));
@@ -206,7 +350,12 @@ public class AmazingNumbers {
         List<String> multProps = requests.subList(3, requests.size());
 
         for (String prop : multProps) {
-            if (!"true".equals(hasProp(prop, strNum))) {
+
+            if (prop.charAt(0) == '-') {
+                if ("true".equals(hasProp(prop.substring(1), strNum))) {
+                    return false;
+                }
+            } else if (!"true".equals(hasProp(prop, strNum))) {
                 return false;
             }
         }
@@ -248,6 +397,7 @@ public class AmazingNumbers {
     }
 
     static String hasProp(String propType, String strNum) {
+
         if ("buzz".equalsIgnoreCase(propType)) {
             return isBuzzNumber(strNum);
         } else if ("duck".equalsIgnoreCase(propType)) {
@@ -266,8 +416,12 @@ public class AmazingNumbers {
             return isSunnyToStr(strNum);
         } else if ("square".equalsIgnoreCase(propType)) {
             return isPerfSquareToStr(strNum);
+        } else if ("jumping".equalsIgnoreCase(propType)) {
+            return isJumpingToStr(strNum);
+        } else if ("happy".equalsIgnoreCase(propType)) {
+            return isHappyToStr(strNum);
         }
-        return isJumpingToStr(strNum);
+        return isSadToStr(strNum);
     }
 
     static String checkProperties(String strNum) {
@@ -314,6 +468,14 @@ public class AmazingNumbers {
             String jumping = "jumping";
             properties.append(String.format(" %s", jumping));
         }
+        if ("true".equals(isHappyToStr(strNum))) {
+            String happy = "happy";
+            properties.append(String.format(" %s", happy));
+        }
+        if ("true".equals(isSadToStr(strNum))) {
+            String sad = "sad";
+            properties.append(String.format(" %s", sad));
+        }
         return properties.toString();
     }
 
@@ -341,7 +503,7 @@ public class AmazingNumbers {
                 isDuckNum(strNum), isPalindromic(strNum),
                 isGapful(strNum), isSpyNumber(strNum),
                 isSunnyToStr(strNum), isPerfSquareToStr(strNum),
-                isJumpingToStr(strNum));
+                isJumpingToStr(strNum), isHappyToStr(strNum), isSadToStr(strNum));
     }
     static boolean isNaturalNumber(String strNum) {
 

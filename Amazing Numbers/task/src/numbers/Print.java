@@ -16,6 +16,7 @@ public class Print {
         System.out.println("  * the first parameter represents a starting number;");
         System.out.println("  * the second parameter shows how many consecutive numbers are to be printed;");
         System.out.println("- two natural numbers and properties to search for;");
+        System.out.println("- a property preceded by minus must not be present in numbers;");
         System.out.println("- separate the parameters with one space;");
         System.out.println("- enter 0 to exit.");
     }
@@ -105,13 +106,24 @@ public class Print {
     }
 
     static void printJumpingStatus(String jumpingStatus) {
+
         System.out.printf("        jumping: %s%n", jumpingStatus);
+    }
+
+    static void printHappyStatus(String happyStatus) {
+
+        System.out.printf("        happy: %s%n", happyStatus);
+    }
+
+    static void printSadStatus(String sadStatus) {
+
+        System.out.printf("        sad: %s%n", sadStatus);
     }
 
     static void printAll(String strNum, String even, String odd,
                          String buzz, String duck, String palindrome,
                          String gapful, String spy, String sunny,
-                         String perfectSquare, String jumping) {
+                         String perfectSquare, String jumping, String happy, String sad) {
         printTitle(strNum);
         printParity(even, odd);
         printBuzzStatus(buzz);
@@ -122,6 +134,8 @@ public class Print {
         printSunnyStatus(sunny);
         printPerfectSquareStatus(perfectSquare);
         printJumpingStatus(jumping);
+        printHappyStatus(happy);
+        printSadStatus(sad);
 
     }
 }
